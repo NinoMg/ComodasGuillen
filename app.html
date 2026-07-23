@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Comidas Guillen - Empanadas Caseras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#D4A84B;--gold-light:#E8C97A;--gold-dark:#B8923A;--gold-muted:rgba(212,168,75,0.12);
+  --cream:#FFF9E8;--brown:#1A0F0A;--brown-card:#241610;--brown-light:#3A2418;--brown-hover:#4A2E1F;
+  --gray:#9A8B7C;--gray-dark:#6B5D50;--gray-line:rgba(212,168,75,0.08);
+  --green:#5CB85C;--red:#E74C3C;--orange:#F39C12;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Poppins',sans-serif;background:var(--brown);color:var(--cream);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.app-container{max-width:480px;margin:0 auto;min-height:100vh;position:relative;background:var(--brown)}
+.screen{display:none;min-height:100vh;padding-bottom:90px;animation:fadeIn .35s cubic-bezier(.4,0,.2,1)}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* HEADER */
+.header{background:linear-gradient(180deg,var(--brown) 0%,rgba(26,15,10,.95) 100%);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.header-logo{height:44px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.header-actions{display:flex;gap:10px;align-items:center}
+.header-btn{width:40px;height:40px;border-radius:14px;background:var(--gold-muted);border:1px solid rgba(212,168,75,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all .25s ease}
+.header-btn:active{transform:scale(.92)}
+.header-btn svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.8}
+.cart-badge{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(231,76,60,.4)}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:linear-gradient(0deg,var(--brown) 0%,rgba(26,15,10,.97) 100%);border-top:1px solid var(--gray-line);display:flex;justify-content:space-around;padding:6px 0 12px;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 16px;cursor:pointer;border:none;background:none;color:var(--gray-dark);font-family:'Poppins',sans-serif;font-size:10px;font-weight:500;transition:all .25s ease;position:relative}
+.nav-item.active{color:var(--gold)}
+.nav-item.active::before{content:'';position:absolute;top:-6px;width:24px;height:3px;background:var(--gold);border-radius:2px}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;transition:all .25s ease}
+.nav-item.active svg{stroke:var(--gold);transform:translateY(-1px)}
+
+/* HERO */
+.hero{position:relative;height:240px;overflow:hidden;margin:0 16px;border-radius:20px;margin-top:8px}
+.hero-img{width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(1.1)}
+.hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;background:linear-gradient(0deg,rgba(26,15,10,.9) 0%,rgba(26,15,10,.2) 60%,transparent 100%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-muted);border:1px solid rgba(212,168,75,.2);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;color:var(--gold-light);margin-bottom:10px;width:fit-content}
+.hero-badge svg{width:12px;height:12px;stroke:var(--gold)}
+.hero-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--cream);margin-bottom:6px;line-height:1.2}
+.hero-subtitle{font-size:13px;color:var(--gray);font-weight:300;max-width:280px}
+
+/* PROMO */
+.promo-card{margin:16px;background:linear-gradient(135deg,var(--gold-dark) 0%,var(--gold) 50%,var(--gold-light) 100%);border-radius:18px;padding:18px 20px;position:relative;overflow:hidden;cursor:pointer;transition:all .3s ease}
+.promo-card:active{transform:scale(.98)}
+.promo-card::after{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%}
+.promo-card::before{content:'';position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(255,255,255,.05);border-radius:50%}
+.promo-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(26,15,10,.7);margin-bottom:4px}
+.promo-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--brown);margin-bottom:4px}
+.promo-desc{font-size:12px;color:rgba(26,15,10,.7);font-weight:500}
+.promo-arrow{position:absolute;right:18px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:rgba(26,15,10,.15);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.promo-arrow svg{width:16px;height:16px;stroke:var(--brown);stroke-width:2.5}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:24px 18px 14px}
+.section-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:10px}
+.section-title svg{width:20px;height:20px;stroke:var(--gold);stroke-width:2}
+.section-count{font-size:12px;color:var(--gray);font-weight:500}
+
+/* CATEGORIES */
+.categories{display:flex;gap:8px;padding:0 18px 18px;overflow-x:auto;scrollbar-width:none}
+.categories::-webkit-scrollbar{display:none}
+.category-chip{padding:9px 18px;border-radius:24px;background:var(--brown-card);border:1px solid var(--gray-line);color:var(--gray);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .25s ease;font-family:'Poppins',sans-serif}
+.category-chip.active{background:var(--gold);color:var(--brown);border-color:var(--gold);font-weight:600;box-shadow:0 4px 16px rgba(212,168,75,.25)}
+
+/* PRODUCTS */
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 18px 24px}
+.product-card{background:var(--brown-card);border-radius:20px;overflow:hidden;border:1px solid var(--gray-line);transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.product-card:active{transform:scale(.97)}
+.product-img-wrap{position:relative;overflow:hidden}
+.product-img{width:100%;height:130px;object-fit:cover;transition:transform .4s ease}
+.product-card:hover .product-img{transform:scale(1.05)}
+.product-tag{position:absolute;top:10px;left:10px;background:rgba(26,15,10,.75);backdrop-filter:blur(8px);padding:4px 10px;border-radius:12px;font-size:10px;font-weight:600;color:var(--gold-light);text-transform:uppercase;letter-spacing:.5px}
+.product-info{padding:14px}
+.product-name{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:5px;line-height:1.3}
+.product-desc{font-size:11px;color:var(--gray);margin-bottom:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-footer{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-size:16px;font-weight:700;color:var(--gold)}
+.add-btn{width:34px;height:34px;border-radius:12px;background:var(--gold);border:none;color:var(--brown);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;font-weight:700;transition:all .2s ease;box-shadow:0 4px 12px rgba(212,168,75,.3)}
+.add-btn:active{transform:scale(.9);box-shadow:0 2px 6px rgba(212,168,75,.2)}
+
+/* QTY */
+.qty-control{display:flex;align-items:center;gap:10px;background:var(--brown-light);padding:4px 10px;border-radius:12px}
+.qty-btn{width:26px;height:26px;border-radius:8px;border:none;background:var(--brown-hover);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700;transition:all .15s}
+.qty-btn:active{background:var(--gold);color:var(--brown)}
+.qty-value{font-size:14px;font-weight:600;color:var(--cream);min-width:20px;text-align:center}
+
+/* CART */
+.cart-empty{text-align:center;padding:80px 24px}
+.cart-empty-icon{width:80px;height:80px;margin:0 auto 20px;background:var(--brown-card);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray-line)}
+.cart-empty-icon svg{width:36px;height:36px;stroke:var(--gray-dark);stroke-width:1.5}
+.cart-empty h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:8px;color:var(--cream);font-weight:600}
+.cart-empty p{font-size:14px;color:var(--gray);margin-bottom:24px}
+.cart-empty-btn{padding:14px 32px;border-radius:14px;background:var(--gold);color:var(--brown);border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s}
+.cart-empty-btn:active{transform:scale(.95)}
+.cart-items{padding:0 18px}
+.cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--gray-line)}
+.cart-item-img{width:72px;height:72px;border-radius:14px;object-fit:cover;border:1px solid var(--gray-line)}
+.cart-item-info{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.cart-item-name{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:2px}
+.cart-item-unit{font-size:12px;color:var(--gray)}
+.cart-item-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.cart-item-total{font-size:15px;font-weight:700;color:var(--gold)}
+.remove-btn{background:none;border:none;color:var(--gray);font-size:12px;cursor:pointer;padding:4px 8px;transition:color .2s}
+.remove-btn:active{color:var(--red)}
+.cart-summary{background:var(--brown-card);margin:16px 18px;border-radius:20px;padding:20px;border:1px solid var(--gray-line)}
+.summary-row{display:flex;justify-content:space-between;padding:7px 0;font-size:14px;color:var(--gray)}
+.summary-row.total{border-top:1px solid var(--gray-line);margin-top:10px;padding-top:14px;font-size:20px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif}
+.summary-row.total span:last-child{color:var(--gold-light)}
+.checkout-btn{width:calc(100% - 36px);margin:0 18px 18px;padding:17px;border-radius:16px;background:var(--gold);color:var(--brown);border:none;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s ease;font-family:'Poppins',sans-serif;box-shadow:0 6px 20px rgba(212,168,75,.25);letter-spacing:.3px}
+.checkout-btn:active{transform:scale(.97);box-shadow:0 3px 10px rgba(212,168,75,.15)}
+
+/* CHECKOUT */
+.checkout-form{padding:0 18px 24px}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--gold-light);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
+.form-input,.form-select,.form-textarea{width:100%;padding:15px 18px;border-radius:14px;border:1px solid var(--gray-line);background:var(--brown-card);color:var(--cream);font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:all .25s ease}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,168,75,.08)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--gray-dark)}
+.form-textarea{min-height:90px;resize:vertical}
+.form-select option{background:var(--brown-card);color:var(--cream)}
+.radio-group{display:flex;gap:10px}
+.radio-option{flex:1;padding:16px 12px;border-radius:16px;border:1.5px solid var(--gray-line);background:var(--brown-card);cursor:pointer;text-align:center;transition:all .25s ease}
+.radio-option.selected{border-color:var(--gold);background:var(--gold-muted)}
+.radio-option svg{width:24px;height:24px;stroke:var(--gray);margin-bottom:8px;stroke-width:1.5}
+.radio-option.selected svg{stroke:var(--gold)}
+.radio-option-label{font-size:13px;font-weight:600;color:var(--cream);display:block;margin-bottom:2px}
+.radio-option-desc{font-size:11px;color:var(--gray)}
+
+/* ORDERS */
+.orders-list{padding:0 18px}
+.order-card{background:var(--brown-card);border-radius:20px;padding:18px;margin-bottom:14px;border:1px solid var(--gray-line);transition:all .2s ease}
+.order-card:active{transform:scale(.98)}
+.order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.order-id{font-size:13px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif}
+.order-status{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px}
+.order-status::before{content:'';width:6px;height:6px;border-radius:50%;display:inline-block}
+.status-pending{background:rgba(243,156,18,.12);color:var(--orange)}
+.status-pending::before{background:var(--orange)}
+.status-preparing{background:var(--gold-muted);color:var(--gold)}
+.status-preparing::before{background:var(--gold)}
+.status-ready{background:rgba(92,184,92,.12);color:var(--green)}
+.status-ready::before{background:var(--green)}
+.status-delivered{background:rgba(139,195,74,.1);color:#8BC34A}
+.status-delivered::before{background:#8BC34A}
+.order-items{font-size:13px;color:var(--gray);margin-bottom:12px;line-height:1.6}
+.order-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--gray-line)}
+.order-date{font-size:12px;color:var(--gray-dark);display:flex;align-items:center;gap:5px}
+.order-date svg{width:13px;height:13px;stroke:var(--gray-dark);stroke-width:2}
+.order-total{font-size:16px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif}
+
+/* PROFILE */
+.profile-header{text-align:center;padding:40px 20px 30px}
+.profile-avatar{width:90px;height:90px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;font-weight:700;color:var(--brown);box-shadow:0 8px 24px rgba(212,168,75,.25)}
+.profile-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:4px}
+.profile-email{font-size:13px;color:var(--gray)}
+.profile-menu{padding:0 18px}
+.menu-item{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--brown-card);border-radius:16px;margin-bottom:10px;cursor:pointer;transition:all .2s ease;border:1px solid var(--gray-line)}
+.menu-item:active{transform:scale(.98);border-color:rgba(212,168,75,.2)}
+.menu-icon{width:42px;height:42px;border-radius:14px;background:var(--gold-muted);display:flex;align-items:center;justify-content:center}
+.menu-icon svg{width:20px;height:20px;stroke:var(--gold);stroke-width:1.8}
+.menu-text{flex:1}
+.menu-title{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:2px}
+.menu-desc{font-size:12px;color:var(--gray)}
+.menu-arrow{color:var(--gray-dark);font-size:20px;font-weight:300}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:flex-end;justify-content:center;z-index:200;opacity:0;transition:opacity .3s ease}
+.modal-overlay.active{display:flex;opacity:1}
+.modal{background:var(--brown-card);width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:24px;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto;border-top:1px solid var(--gray-line)}
+.modal-overlay.active .modal{transform:translateY(0)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--cream)}
+.modal-close{width:38px;height:38px;border-radius:50%;background:var(--brown-light);border:none;color:var(--gray);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:active{background:var(--gold);color:var(--brown)}
+.modal-img{width:100%;height:220px;object-fit:cover;border-radius:20px;margin-bottom:18px}
+.modal-price-tag{font-size:28px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif;margin-bottom:20px}
+.modal-desc{font-size:14px;color:var(--gray);margin-bottom:24px;line-height:1.7}
+.modal-footer{display:flex;gap:14px;padding-top:18px;border-top:1px solid var(--gray-line)}
+.modal-qty{display:flex;align-items:center;gap:14px;background:var(--brown);padding:10px 18px;border-radius:14px}
+.modal-qty-btn{width:34px;height:34px;border-radius:10px;border:none;background:var(--brown-light);color:var(--gold);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-qty-btn:active{background:var(--gold);color:var(--brown)}
+.modal-qty-value{font-size:17px;font-weight:700;color:var(--cream);min-width:24px;text-align:center}
+.modal-add-btn{flex:1;padding:16px;border-radius:16px;background:var(--gold);color:var(--brown);border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;box-shadow:0 6px 20px rgba(212,168,75,.25);transition:all .2s}
+.modal-add-btn:active{transform:scale(.97)}
+
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--brown-card);color:var(--cream);padding:14px 22px;border-radius:14px;font-size:13px;font-weight:500;z-index:300;border:1px solid rgba(212,168,75,.2);box-shadow:0 12px 40px rgba(0,0,0,.5);display:flex;align-items:center;gap:10px;transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:90%;backdrop-filter:blur(12px)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast svg{width:20px;height:20px;stroke:var(--green);stroke-width:2.5;flex-shrink:0}
+
+/* SUCCESS */
+.success-screen{text-align:center;padding:80px 24px}
+.success-icon{width:90px;height:90px;border-radius:50%;background:rgba(92,184,92,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;border:1px solid rgba(92,184,92,.15)}
+.success-icon svg{width:44px;height:44px;stroke:var(--green);stroke-width:2.5}
+.success-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--cream);margin-bottom:12px}
+.success-text{font-size:14px;color:var(--gray);margin-bottom:36px;line-height:1.7;max-width:300px;margin-left:auto;margin-right:auto}
+.success-order-id{background:var(--brown-card);padding:18px 28px;border-radius:18px;display:inline-block;margin-bottom:32px;border:1px solid var(--gray-line)}
+.success-order-id-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.success-order-id-value{font-size:20px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif}
+.success-btn{padding:16px 40px;border-radius:16px;background:var(--gold);color:var(--brown);border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;box-shadow:0 6px 20px rgba(212,168,75,.25);transition:all .2s}
+.success-btn:active{transform:scale(.97)}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--brown)}
+::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:2px}
+@media(min-width:481px){.app-container{box-shadow:0 0 60px rgba(0,0,0,.6)}}
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <img src="logo.png" alt="Comidas Guillen" class="header-logo">
+    <div class="header-actions">
+      <button class="header-btn" onclick="showScreen('profile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+      <button class="header-btn" onclick="showScreen('cart')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="screen active" id="screen-home">
+    <div class="hero">
+      <img src="https://kimi-web-img.moonshot.cn/img/imag.bonviveur.com/53d1f85cf32e356a7abaff1a88bf5995d60357f4.jpg" alt="Empanadas" class="hero-img">
+      <div class="hero-overlay">
+        <div class="hero-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Hechas a mano
+        </div>
+        <h1 class="hero-title">Empanadas Caseras</h1>
+        <p class="hero-subtitle">Receta familiar con mas de 30 anos de tradicion</p>
+      </div>
+    </div>
+
+    <div class="promo-card" onclick="showPromoDetail()">
+      <div class="promo-label">Promocion del dia</div>
+      <div class="promo-title">Miercoles de 15</div>
+      <div class="promo-desc">Llevate 15 empanadas al precio de la docena</div>
+      <div class="promo-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Nuestras Especialidades
+      </h2>
+      <span class="section-count" id="productCount">15 productos</span>
+    </div>
+
+    <div class="categories" id="categories">
+      <button class="category-chip active" data-cat="all">Todas</button>
+      <button class="category-chip" data-cat="carne">Carne</button>
+      <button class="category-chip" data-cat="pollo">Pollo</button>
+      <button class="category-chip" data-cat="queso">Queso</button>
+      <button class="category-chip" data-cat="verdura">Verdura</button>
+      <button class="category-chip" data-cat="dulce">Dulce</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <div class="screen" id="screen-cart">
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Tu Pedido
+      </h2>
+    </div>
+    <div id="cartContent"></div>
+  </div>
+
+  <div class="screen" id="screen-checkout">
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Finalizar Pedido
+      </h2>
+    </div>
+    <form class="checkout-form" id="checkoutForm" onsubmit="submitOrder(event)">
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" class="form-input" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefono</label>
+        <input type="tel" class="form-input" placeholder="Ej: 11 2345-6789" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Direccion de entrega</label>
+        <input type="text" class="form-input" placeholder="Calle, numero, piso, depto" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Forma de entrega</label>
+        <div class="radio-group">
+          <div class="radio-option selected" onclick="selectDelivery(this,'delivery')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span class="radio-option-label">Delivery</span>
+            <span class="radio-option-desc">A domicilio</span>
+          </div>
+          <div class="radio-option" onclick="selectDelivery(this,'pickup')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="radio-option-label">Retiro</span>
+            <span class="radio-option-desc">En local</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Metodo de pago</label>
+        <select class="form-select" required>
+          <option value="">Seleccionar...</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia</option>
+          <option value="mercadopago">Mercado Pago</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notas adicionales</label>
+        <textarea class="form-textarea" placeholder="Alguna indicacion especial..."></textarea>
+      </div>
+      <div class="cart-summary" style="margin:0 0 16px 0">
+        <div class="summary-row"><span>Subtotal</span><span id="checkoutSubtotal">$0</span></div>
+        <div class="summary-row"><span>Envio</span><span id="checkoutShipping">$0</span></div>
+        <div class="summary-row total"><span>Total</span><span id="checkoutTotal">$0</span></div>
+      </div>
+      <button type="submit" class="checkout-btn">Confirmar Pedido</button>
+    </form>
+  </div>
+
+  <div class="screen" id="screen-orders">
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Mis Pedidos
+      </h2>
+    </div>
+    <div class="orders-list" id="ordersList"></div>
+  </div>
+
+  <div class="screen" id="screen-profile">
+    <div class="profile-header">
+      <div class="profile-avatar">CG</div>
+      <div class="profile-name">Cliente Guillen</div>
+      <div class="profile-email">cliente@comidasguillen.com</div>
+    </div>
+    <div class="profile-menu">
+      <div class="menu-item" onclick="showScreen('orders')">
+        <div class="menu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Mis Pedidos</div>
+          <div class="menu-desc">Ver historial de compras</div>
+        </div>
+        <span class="menu-arrow">&#8250;</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Editar Perfil</div>
+          <div class="menu-desc">Cambiar datos personales</div>
+        </div>
+        <span class="menu-arrow">&#8250;</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Ayuda</div>
+          <div class="menu-desc">Preguntas frecuentes</div>
+        </div>
+        <span class="menu-arrow">&#8250;</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Notificaciones</div>
+          <div class="menu-desc">Configurar alertas</div>
+        </div>
+        <span class="menu-arrow">&#8250;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-success">
+    <div class="success-screen">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="success-title">Pedido Confirmado!</h2>
+      <p class="success-text">Gracias por elegir Comidas Guillen. Tu pedido esta en camino y te notificaremos cuando este listo.</p>
+      <div class="success-order-id">
+        <div class="success-order-id-label">Numero de pedido</div>
+        <div class="success-order-id-value" id="successOrderId">#CG-0001</div>
+      </div>
+      <button class="success-btn" onclick="showScreen('orders')">Ver mis pedidos</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-screen="home" onclick="showScreen('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </button>
+    <button class="nav-item" data-screen="cart" onclick="showScreen('cart')">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Carrito
+    </button>
+    <button class="nav-item" data-screen="orders" onclick="showScreen('orders')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Pedidos
+    </button>
+    <button class="nav-item" data-screen="profile" onclick="showScreen('profile')">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil
+    </button>
+  </nav>
+
+  <div class="modal-overlay" id="productModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Producto</h3>
+        <button class="modal-close" onclick="closeModal()">&#215;</button>
+      </div>
+      <img src="" alt="" class="modal-img" id="modalImg">
+      <div class="modal-price-tag" id="modalPriceTag">$0</div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-footer">
+        <div class="modal-qty">
+          <button class="modal-qty-btn" onclick="changeModalQty(-1)">&#8722;</button>
+          <span class="modal-qty-value" id="modalQty">1</span>
+          <button class="modal-qty-btn" onclick="changeModalQty(1)">+</button>
+        </div>
+        <button class="modal-add-btn" id="modalAddBtn" onclick="addFromModal()">
+          Agregar - $<span id="modalPrice">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg">Producto agregado</span>
+  </div>
+</div>
+
+<script>
+const products=[
+{id:1,name:"Carne Suave",desc:"Carne molida, cebolla y especias tradicionales",price:850,category:"carne",img:"https://kimi-web-img.moonshot.cn/img/imag.bonviveur.com/53d1f85cf32e356a7abaff1a88bf5995d60357f4.jpg"},
+{id:2,name:"Carne Picante",desc:"Carne con un toque picante especial",price:850,category:"carne",img:"https://kimi-web-img.moonshot.cn/img/media.tycsports.com/19df248f73ae84fbe951c63e4bf08c816ae082e7.webp"},
+{id:3,name:"Carne Cuchillo",desc:"Carne cortada a cuchillo, la clasica",price:900,category:"carne",img:"https://kimi-web-img.moonshot.cn/img/www.laylita.com/1946f953122a1934e1417216beb2773f72425c53.jpg"},
+{id:4,name:"Pollo",desc:"Pollo desmenuzado con cebolla y morron",price:850,category:"pollo",img:"https://kimi-web-img.moonshot.cn/img/www.laylita.com/d9444a27dfcb45077715cce2692ab60f9ee250dd.jpg"},
+{id:5,name:"Pollo Champinon",desc:"Pollo con champinones salteados",price:900,category:"pollo",img:"https://kimi-web-img.moonshot.cn/img/cuk-it.com/4d0201c2b8c57026f05bbad986299c130cba233a.webp"},
+{id:6,name:"Jamon y Queso",desc:"Jamon cocido y queso mozzarella",price:850,category:"queso",img:"https://kimi-web-img.moonshot.cn/img/productosgourmet.online/06db00b9ee9ecef09d75c730eb23ebe48ca2be1a.jpg"},
+{id:7,name:"Queso y Cebolla",desc:"Queso y cebolla caramelizada",price:850,category:"queso",img:"https://kimi-web-img.moonshot.cn/img/i0.wp.com/ff9f9655f6cdad35c0719aaede7fbea201ed617d.jpg"},
+{id:8,name:"Capresse",desc:"Tomate fresco, albahaca y mozzarella",price:900,category:"queso",img:"https://kimi-web-img.moonshot.cn/img/www.laylita.com/2c82abbf3eddc5721dd1d70ed001ddbdd88ae54c.jpg"},
+{id:9,name:"Humita",desc:"Choclo tierno, cebolla y especias",price:850,category:"verdura",img:"https://kimi-web-img.moonshot.cn/img/imag.bonviveur.com/53d1f85cf32e356a7abaff1a88bf5995d60357f4.jpg"},
+{id:10,name:"Verdura",desc:"Espinaca, acelga y queso rallado",price:850,category:"verdura",img:"https://kimi-web-img.moonshot.cn/img/media.tycsports.com/19df248f73ae84fbe951c63e4bf08c816ae082e7.webp"},
+{id:11,name:"Roquefort",desc:"Queso roquefort con nueces",price:950,category:"queso",img:"https://kimi-web-img.moonshot.cn/img/www.laylita.com/1946f953122a1934e1417216beb2773f72425c53.jpg"},
+{id:12,name:"Atun",desc:"Atun con cebolla, morron y aceitunas",price:950,category:"carne",img:"https://kimi-web-img.moonshot.cn/img/www.laylita.com/d9444a27dfcb45077715cce2692ab60f9ee250dd.jpg"},
+{id:13,name:"Calabaza",desc:"Calabaza asada con queso",price:850,category:"verdura",img:"https://kimi-web-img.moonshot.cn/img/cuk-it.com/4d0201c2b8c57026f05bbad986299c130cba233a.webp"},
+{id:14,name:"Dulce de Membrillo",desc:"Membrillo casero de la casa",price:800,category:"dulce",img:"https://kimi-web-img.moonshot.cn/img/productosgourmet.online/06db00b9ee9ecef09d75c730eb23ebe48ca2be1a.jpg"},
+{id:15,name:"Batata",desc:"Dulce de batata artesanal",price:800,category:"dulce",img:"https://kimi-web-img.moonshot.cn/img/i0.wp.com/ff9f9655f6cdad35c0719aaede7fbea201ed617d.jpg"}
+];
+
+let cart=[];
+let orders=[
+{id:"CG-0042",date:"20/07/2026",status:"delivered",items:"6x Carne Suave, 6x Jamon y Queso",total:10200},
+{id:"CG-0043",date:"18/07/2026",status:"ready",items:"12x Carne Picante, 6x Pollo",total:15300},
+{id:"CG-0044",date:"Hoy",status:"preparing",items:"6x Humita, 6x Capresse",total:10500}
+];
+let currentCategory='all';
+let modalProduct=null;
+let modalQty=1;
+
+document.addEventListener('DOMContentLoaded',()=>{renderProducts();renderOrders();setupCategories()});
+
+function renderProducts(){
+const grid=document.getElementById('productsGrid');
+const filtered=currentCategory==='all'?products:products.filter(p=>p.category===currentCategory);
+const count=document.getElementById('productCount');
+if(count)count.textContent=filtered.length+' productos';
+grid.innerHTML=filtered.map(p=>{
+const inCart=cart.find(c=>c.id===p.id);
+return '<div class="product-card" onclick="openProductModal('+p.id+')">'+
+'<div class="product-img-wrap">'+
+'<img src="'+p.img+'" alt="'+p.name+'" class="product-img" loading="lazy">'+
+'<span class="product-tag">'+p.category+'</span>'+
+'</div>'+
+'<div class="product-info">'+
+'<div class="product-name">'+p.name+'</div>'+
+'<div class="product-desc">'+p.desc+'</div>'+
+'<div class="product-footer">'+
+'<span class="product-price">$'+p.price+'</span>'+
+(inCart
+?'<div class="qty-control" onclick="event.stopPropagation()">'+
+'<button class="qty-btn" onclick="updateCartQty('+p.id+',-1)">-</button>'+
+'<span class="qty-value">'+inCart.qty+'</span>'+
+'<button class="qty-btn" onclick="updateCartQty('+p.id+',1)">+</button>'+
+'</div>'
+:'<button class="add-btn" onclick="event.stopPropagation();addToCart('+p.id+')">+</button>'
+)+
+'</div>'+
+'</div>'+
+'</div>';
+}).join('');
+}
+
+function setupCategories(){
+document.querySelectorAll('.category-chip').forEach(chip=>{
+chip.addEventListener('click',()=>{
+document.querySelectorAll('.category-chip').forEach(c=>c.classList.remove('active'));
+chip.classList.add('active');
+currentCategory=chip.dataset.cat;
+renderProducts();
+});
+});
+}
+
+function addToCart(id){
+const product=products.find(p=>p.id===id);
+const existing=cart.find(c=>c.id===id);
+if(existing){existing.qty++;}
+else{cart.push(Object.assign({},product,{qty:1}));}
+updateCartBadge();
+renderProducts();
+showToast(product.name+' agregado al carrito');
+}
+
+function updateCartQty(id,delta){
+const item=cart.find(c=>c.id===id);
+if(!item)return;
+item.qty+=delta;
+if(item.qty<=0){cart=cart.filter(c=>c.id!==id);}
+updateCartBadge();
+renderProducts();
+if(document.getElementById('screen-cart').classList.contains('active')){renderCart();}
+}
+
+function updateCartBadge(){
+const total=cart.reduce((sum,c)=>sum+c.qty,0);
+const badge=document.getElementById('cartBadge');
+if(total>0){badge.textContent=total;badge.style.display='flex';}
+else{badge.style.display='none';}
+}
+
+function renderCart(){
+const content=document.getElementById('cartContent');
+if(cart.length===0){
+content.innerHTML='<div class="cart-empty">'+
+'<div class="cart-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>'+
+'<h3>Tu carrito esta vacio</h3>'+
+'<p>Agrega algunas empanadas para empezar</p>'+
+'<button class="cart-empty-btn" onclick="showScreen(\'home\')">Ver productos</button>'+
+'</div>';
+return;
+}
+const subtotal=cart.reduce((sum,c)=>sum+c.price*c.qty,0);
+const shipping=subtotal>=5000?0:500;
+const total=subtotal+shipping;
+content.innerHTML='<div class="cart-items">'+
+cart.map(item=>
+'<div class="cart-item">'+
+'<img src="'+item.img+'" alt="'+item.name+'" class="cart-item-img">'+
+'<div class="cart-item-info">'+
+'<div>'+
+'<div class="cart-item-name">'+item.name+'</div>'+
+'<div class="cart-item-unit">$'+item.price+' c/u</div>'+
+'</div>'+
+'<div class="cart-item-footer">'+
+'<div class="qty-control">'+
+'<button class="qty-btn" onclick="updateCartQty('+item.id+',-1)">-</button>'+
+'<span class="qty-value">'+item.qty+'</span>'+
+'<button class="qty-btn" onclick="updateCartQty('+item.id+',1)">+</button>'+
+'</div>'+
+'<div style="display:flex;align-items:center;gap:12px">'+
+'<span class="cart-item-total">$'+(item.price*item.qty).toLocaleString()+'</span>'+
+'<button class="remove-btn" onclick="updateCartQty('+item.id+',-'+item.qty+')">Eliminar</button>'+
+'</div>'+
+'</div>'+
+'</div>'+
+'</div>'
+).join('')+
+'</div>'+
+'<div class="cart-summary">'+
+'<div class="summary-row"><span>Subtotal</span><span>$'+subtotal.toLocaleString()+'</span></div>'+
+'<div class="summary-row"><span>Envio</span><span>'+(shipping===0?'Gratis':'$'+shipping)+'</span></div>'+
+'<div class="summary-row total"><span>Total</span><span>$'+total.toLocaleString()+'</span></div>'+
+'</div>'+
+'<button class="checkout-btn" onclick="goToCheckout()">Continuar con el pedido</button>';
+}
+
+function openProductModal(id){
+modalProduct=products.find(p=>p.id===id);
+modalQty=1;
+document.getElementById('modalTitle').textContent=modalProduct.name;
+document.getElementById('modalImg').src=modalProduct.img;
+document.getElementById('modalDesc').textContent=modalProduct.desc;
+document.getElementById('modalPriceTag').textContent='$'+modalProduct.price;
+document.getElementById('modalPrice').textContent=modalProduct.price;
+document.getElementById('modalQty').textContent=modalQty;
+document.getElementById('productModal').classList.add('active');
+document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+document.getElementById('productModal').classList.remove('active');
+document.body.style.overflow='';
+}
+
+function changeModalQty(delta){
+modalQty=Math.max(1,modalQty+delta);
+document.getElementById('modalQty').textContent=modalQty;
+document.getElementById('modalPrice').textContent=(modalProduct.price*modalQty).toLocaleString();
+}
+
+function addFromModal(){
+const existing=cart.find(c=>c.id===modalProduct.id);
+if(existing){existing.qty+=modalQty;}
+else{cart.push(Object.assign({},modalProduct,{qty:modalQty}));}
+updateCartBadge();
+renderProducts();
+closeModal();
+showToast(modalQty+'x '+modalProduct.name+' agregado');
+}
+
+function goToCheckout(){
+const subtotal=cart.reduce((sum,c)=>sum+c.price*c.qty,0);
+const shipping=subtotal>=5000?0:500;
+const total=subtotal+shipping;
+document.getElementById('checkoutSubtotal').textContent='$'+subtotal.toLocaleString();
+document.getElementById('checkoutShipping').textContent=shipping===0?'Gratis':'$'+shipping;
+document.getElementById('checkoutTotal').textContent='$'+total.toLocaleString();
+showScreen('checkout');
+}
+
+function selectDelivery(el,type){
+document.querySelectorAll('.radio-option').forEach(o=>o.classList.remove('selected'));
+el.classList.add('selected');
+const shipping=type==='pickup'?0:(cart.reduce((sum,c)=>sum+c.price*c.qty,0)>=5000?0:500);
+const subtotal=cart.reduce((sum,c)=>sum+c.price*c.qty,0);
+const total=subtotal+shipping;
+document.getElementById('checkoutShipping').textContent=shipping===0?'Gratis':'$'+shipping;
+document.getElementById('checkoutTotal').textContent='$'+total.toLocaleString();
+}
+
+function submitOrder(e){
+e.preventDefault();
+const total=cart.reduce((sum,c)=>sum+c.price*c.qty,0);
+const orderId='CG-'+String(Math.floor(Math.random()*9000)+1000);
+const itemsText=cart.map(c=>c.qty+'x '+c.name).join(', ');
+orders.unshift({id:orderId,date:'Hoy',status:'pending',items:itemsText,total:total});
+document.getElementById('successOrderId').textContent='#'+orderId;
+cart=[];
+updateCartBadge();
+renderProducts();
+renderOrders();
+showScreen('success');
+document.getElementById('checkoutForm').reset();
+}
+
+function renderOrders(){
+const list=document.getElementById('ordersList');
+list.innerHTML=orders.map(o=>{
+const statusClass='status-'+o.status;
+const statusText={pending:'Pendiente',preparing:'En preparacion',ready:'Listo',delivered:'Entregado'}[o.status];
+return '<div class="order-card">'+
+'<div class="order-header">'+
+'<span class="order-id">#'+o.id+'</span>'+
+'<span class="order-status '+statusClass+'">'+statusText+'</span>'+
+'</div>'+
+'<div class="order-items">'+o.items+'</div>'+
+'<div class="order-footer">'+
+'<span class="order-date">'+
+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'+
+o.date+
+'</span>'+
+'<span class="order-total">$'+o.total.toLocaleString()+'</span>'+
+'</div>'+
+'</div>';
+}).join('');
+}
+
+function showScreen(name){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById('screen-'+name).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+const navItem=document.querySelector('.nav-item[data-screen="'+name+'"]');
+if(navItem)navItem.classList.add('active');
+window.scrollTo(0,0);
+if(name==='cart')renderCart();
+if(name==='orders')renderOrders();
+}
+
+function showToast(msg){
+const toast=document.getElementById('toast');
+document.getElementById('toastMsg').textContent=msg;
+toast.classList.add('show');
+setTimeout(()=>toast.classList.remove('show'),2500);
+}
+
+function showPromoDetail(){
+showToast('Miercoles de promo! Docena de 15 unidades');
+}
+
+document.getElementById('productModal').addEventListener('click',(e)=>{
+if(e.target===e.currentTarget)closeModal();
+});
+</script>
+</body>
+</html>
